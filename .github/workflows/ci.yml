@@ -16,7 +16,6 @@ jobs:
     strategy:
       matrix:
         arch:
-          - arm
           - arm64
           - amd64
     steps:
@@ -47,7 +46,6 @@ jobs:
     strategy:
       matrix:
         arch:
-          - arm
           - arm64
           - amd64
     steps:
@@ -69,17 +67,6 @@ jobs:
     steps:
       - name: Create a manifest
         run: buildah manifest create podman-systemd-multiarch:latest
-
-      # armhfp
-      - uses: actions/download-artifact@v2
-        with:
-          name: podman-systemd-arm
-
-      - name: Load the arm64 image
-        run: podman image load -i podman-systemd-arm.tar
-
-      - name: Add the arm image to the manifest
-        run: buildah manifest add podman-systemd-multiarch:latest localhost/podman-systemd
 
       # aarch64
       - uses: actions/download-artifact@v2

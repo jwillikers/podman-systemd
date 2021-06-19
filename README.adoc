@@ -21,7 +21,7 @@ A {Systemd}-enabled version of the https://quay.io/repository/containers/podman[
 
 == Quick Start
 
-Supported architectures:: `amd64`, `arm32v7`, `arm64v8`
+Supported architectures:: `amd64`, `arm64v8`
 
 Run {Podman} in a container based off the image with {Podman}.
 
