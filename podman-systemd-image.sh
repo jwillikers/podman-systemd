@@ -53,6 +53,7 @@ buildah run "$CONTAINER" /bin/sh -c 'dnf install -y systemd --nodocs --setopt in
 buildah run "$CONTAINER" /bin/sh -c 'dnf clean all -y'
 
 buildah run "$CONTAINER" /bin/sh -c 'cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done'
+buildah run "$CONTAINER" /bin/sh -c 'cd /lib/systemd/system/multi-user.target.wants/; for i in *; do [ $i == systemd-user-sessions.service ] || rm -f $i; done'
 buildah run "$CONTAINER" /bin/sh -c 'rm -f /lib/systemd/system/multi-user.target.wants/*'
 buildah run "$CONTAINER" /bin/sh -c 'rm -f /etc/systemd/system/*.wants/*'
 buildah run "$CONTAINER" /bin/sh -c 'rm -f /lib/systemd/system/local-fs.target.wants/*'
