@@ -55,6 +55,10 @@ Use {Buildah} to build the image.
 ➜ ~/Projects/podman-systemd-image/podman-systemd-image.sh
 ----
 
+== References
+
+https://developers.redhat.com/blog/2014/05/05/running-systemd-within-docker-container[Running systemd within a Docker Container]
+
 == Contributing
 
 Contributions in the form of issues, feedback, and even pull requests are welcome.
