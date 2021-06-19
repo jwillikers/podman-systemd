@@ -65,7 +65,7 @@ jobs:
       - name: Test the image
         run: |
           # Workaround running Systemd in a Podman container in GitHub Workflows
-          chmod o+rwx -R /sys/fs/cgroup/systemd/
+          sudo chmod o+rwx -R /sys/fs/cgroup/systemd/
           ./test.sh
 
   publish:
