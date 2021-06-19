@@ -27,7 +27,7 @@ Run {Podman} in a container based off the image with {Podman}.
 
 [source,sh]
 ----
-➜ podman run --rm -it --name podman-systemd quay.io/jwillikers/podman-systemd podman --version
+➜ podman run --rm -it --name podman-systemd quay.io/jwillikers/podman-systemd:latest podman --version
 ----
 
 == Build
