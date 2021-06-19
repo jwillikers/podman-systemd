@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build the image with Buildah
-        run: ./podman-systemd-image-minimal.sh -a ${{ matrix.arch }}
+        run: ./podman-systemd-image.sh -a ${{ matrix.arch }}
 
       - name: Tag the image for Fedora 34
         run: podman tag localhost/podman-systemd localhost/podman-systemd:34
