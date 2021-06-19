@@ -63,7 +63,10 @@ jobs:
         run: podman image load -i podman-systemd-${{ matrix.arch }}.tar
 
       - name: Test the image
-        run: ./test.sh
+        run: |
+          # Workaround running Systemd in a Podman container in GitHub Workflows
+          chmod o+rwx -R /sys/fs/cgroup/systemd/
+          ./test.sh
 
   publish:
     name: Publish
