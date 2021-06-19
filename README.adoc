@@ -23,11 +23,18 @@ A {Systemd}-enabled version of the https://quay.io/repository/containers/podman[
 
 Supported architectures:: `amd64`, `arm64v8`
 
-Run {Podman} in a container based off the image with {Podman}.
-
+. Start up the container in the background with {Podman}.
++
 [source,sh]
 ----
-➜ podman run --rm -it --name podman-systemd quay.io/jwillikers/podman-systemd:latest podman --version
+➜ podman run -d --rm -it --name podman-systemd quay.io/jwillikers/podman-systemd:latest
+----
+
+. Now run Podman inside the running container. 
++
+[source,sh]
+----
+➜ podman exec podman-systemd podman --version
 ----
 
 == Build
