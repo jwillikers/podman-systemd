@@ -52,7 +52,7 @@ buildah run "$CONTAINER" /bin/sh -c 'dnf install -y systemd --nodocs --setopt in
 
 buildah run "$CONTAINER" /bin/sh -c 'dnf clean all -y'
 
-buildah run "$CONTAINER" /bin/sh -c '-- rm -f (string match -rv "^systemd-tmpfiles-setup.service$" -- /lib/systemd/system/sysinit.target.wants/*)'
+buildah run "$CONTAINER" /bin/sh -c 'rm -f (string match -rv "^systemd-tmpfiles-setup.service$" -- /lib/systemd/system/sysinit.target.wants/*)'
 buildah run "$CONTAINER" /bin/sh -c 'rm -f /lib/systemd/system/multi-user.target.wants/*'
 buildah run "$CONTAINER" /bin/sh -c 'rm -f /etc/systemd/system/*.wants/*'
 buildah run "$CONTAINER" /bin/sh -c 'rm -f /lib/systemd/system/local-fs.target.wants/*'
