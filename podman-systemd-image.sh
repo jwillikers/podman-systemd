@@ -62,7 +62,7 @@ buildah run "$CONTAINER" /bin/sh -c 'rm -f /lib/systemd/system/sockets.target.wa
 buildah run "$CONTAINER" /bin/sh -c 'rm -f /lib/systemd/system/basic.target.wants/*'
 buildah run "$CONTAINER" /bin/sh -c 'rm -f /lib/systemd/system/anaconda.target.wants/*'
 
-buildah config --entrypoint "/usr/sbin/init" "$CONTAINER"
+buildah config --cmd "/usr/sbin/init" "$CONTAINER"
 
 buildah config --label "io.containers.autoupdate=registry" "$CONTAINER"
 
