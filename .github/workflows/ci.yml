@@ -56,12 +56,8 @@ jobs:
       - name: Load the image
         run: podman image load -i podman-systemd-${{ matrix.arch }}.tar
 
-      - name: Run the image and verify the OpenSSH server is available
-        run: |
-          podman run -d --rm --name test-container localhost/podman-systemd
-          sleep 5
-          podman exec test-container podman --version
-          podman exec test-container systemctl --version
+      - name: Test the image
+        run: ./test.sh
 
   publish:
     name: Publish

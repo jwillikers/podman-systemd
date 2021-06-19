@@ -27,7 +27,7 @@ Supported architectures:: `amd64`, `arm64v8`
 +
 [source,sh]
 ----
-➜ podman run -d --rm -it --name podman-systemd quay.io/jwillikers/podman-systemd:latest
+➜ podman run --systemd always --rm --name podman-systemd -dt quay.io/jwillikers/podman-systemd:latest
 ----
 
 . Now run Podman inside the running container. 
@@ -60,6 +60,15 @@ Use {Buildah} to build the image.
 [source,sh]
 ----
 ➜ ~/Projects/podman-systemd-image/podman-systemd-image.sh
+----
+
+== Test
+
+A test script is provided to test a locally built image.
+
+[source,sh]
+----
+➜ ~/Projects/podman-systemd-image/test.sh
 ----
 
 == References
