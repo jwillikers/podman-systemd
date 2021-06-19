@@ -65,7 +65,7 @@ buildah config --entrypoint "/usr/sbin/init" "$CONTAINER"
 
 buildah config --label "io.containers.autoupdate=registry" "$CONTAINER"
 
-buildah config --author "jordan@jwillikers.com" "$CONTAINER"
+buildah config --author "Jordan Williams <jordan@jwillikers.com>" "$CONTAINER"
 
 buildah commit "$CONTAINER" "$IMAGE"
 
