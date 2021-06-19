@@ -1,0 +1,107 @@
+---
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    # Run at 1:10 on Sunday
+    - cron: "10 1 * * 0"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch:
+          - arm
+          - arm64
+          - amd64
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Build the image with Buildah
+        run: ./podman-systemd-image-minimal.sh -a ${{ matrix.arch }}
+
+      - name: Tag the image for Fedora 34
+        run: podman tag localhost/podman-systemd localhost/podman-systemd:34
+
+      - name: Export the image
+        run: podman image save --format oci-archive -o podman-systemd-${{ matrix.arch }}.tar localhost/podman-systemd
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: podman-systemd-${{ matrix.arch }}
+          path: podman-systemd-${{ matrix.arch }}.tar
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        arch:
+          - arm
+          - arm64
+          - amd64
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: podman-systemd-${{ matrix.arch }}
+
+      - name: Load the image
+        run: podman image load -i podman-systemd-${{ matrix.arch }}.tar
+
+      - name: Run the image and verify the OpenSSH server is available
+        run: podman run --name test-container localhost/podman-systemd podman --version
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Create a manifest
+        run: buildah manifest create podman-systemd-multiarch:latest
+
+      # armhfp
+      - uses: actions/download-artifact@v2
+        with:
+          name: podman-systemd-arm
+
+      - name: Load the arm64 image
+        run: podman image load -i podman-systemd-arm.tar
+
+      - name: Add the arm image to the manifest
+        run: buildah manifest add podman-systemd-multiarch:latest localhost/podman-systemd
+
+      # aarch64
+      - uses: actions/download-artifact@v2
+        with:
+          name: podman-systemd-arm64
+
+      - name: Load the arm64 image
+        run: podman image load -i podman-systemd-arm64.tar
+
+      - name: Add the arm64 image to the manifest
+        run: buildah manifest add podman-systemd-multiarch:latest localhost/podman-systemd
+
+      # x86_64
+      - uses: actions/download-artifact@v2
+        with:
+          name: podman-systemd-amd64
+
+      - name: Load the amd64 image
+        run: podman image load -i podman-systemd-amd64.tar
+
+      - name: Add the amd64 image to the manifest
+        run: buildah manifest add podman-systemd-multiarch:latest localhost/podman-systemd
+
+      - name: Push latest manifest and images to quay.io
+        run: buildah manifest push --rm --all --creds jwillikers+publisher:${{ secrets.REGISTRY_PASSWORD }} podman-systemd-multiarch:latest docker://quay.io/jwillikers/podman-systemd
